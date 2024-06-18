@@ -21,6 +21,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:name="com.example.mytodo.DatabaseProvider"
+            android:authorities="com.example.mytodo"
+            android:exported="false"
+            android:process=":remote">
+            <grant-uri-permission android:pathPattern=".*" android:readPermission="com.example.mytodo.permission.READ_DATA" />
+            <grant-uri-permission android:pathPattern=".*" android:writePermission="com.example.mytodo.permission.WRITE_DATA" />
+        </provider>
     </application>
 
 </manifest>

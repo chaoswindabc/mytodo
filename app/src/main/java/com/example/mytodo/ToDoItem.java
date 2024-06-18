@@ -7,17 +7,25 @@ import java.util.List;
 public class ToDoItem {
     private long id; // 数据库中的主键
     private String title;
-    private String content;
+//    private String content;
     private Date time; // 存储时间戳
-    private String importance; // 重要程度，例如 "重要" 或 "不重要"
+//    private String importance; // 重要程度，例如 "重要" 或 "不重要"
     private boolean isCompleted; // 标记事项是否已完成
 
     // 构造函数
     public ToDoItem(String title, String content, Date time, String importance) {
         this.title = title;
-        this.content = content;
+//        this.content = content;
         this.time = time;
-        this.importance = importance;
+//        this.importance = importance;
+        this.isCompleted = false; // 默认情况下，待办事项未完成
+    }
+
+    public ToDoItem(String title, Date time) {
+        this.title = title;
+//        this.content = content;
+        this.time = time;
+//        this.importance = importance;
         this.isCompleted = false; // 默认情况下，待办事项未完成
     }
 
@@ -38,13 +46,13 @@ public class ToDoItem {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
-    }
+//    public String getContent() {
+//        return content;
+//    }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+//    public void setContent(String content) {
+//        this.content = content;
+//    }
 
     public Date getTime() {
         return time;
@@ -54,13 +62,13 @@ public class ToDoItem {
         this.time = time;
     }
 
-    public String getImportance() {
-        return importance;
-    }
+//    public String getImportance() {
+//        return importance;
+//    }
 
-    public void setImportance(String importance) {
-        this.importance = importance;
-    }
+//    public void setImportance(String importance) {
+//        this.importance = importance;
+//    }
 
     public boolean isCompleted() {
         return isCompleted;
@@ -76,9 +84,9 @@ public class ToDoItem {
         return "ToDoItem{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
+//                ", content='" + content + '\'' +
                 ", time=" + time +
-                ", importance='" + importance + '\'' +
+//                ", importance='" + importance + '\'' +
                 ", isCompleted=" + isCompleted +
                 '}';
     }

@@ -39,9 +39,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ToDoItem toDoItem = mValues.get(position);
         // 将ToDoItem的数据绑定到ViewHolder的视图组件上
         holder.titleTextView.setText(toDoItem.getTitle());
-        holder.contentTextView.setText(toDoItem.getContent());
+//        holder.contentTextView.setText(toDoItem.getContent());
         holder.timeTextView.setText(toDoItem.getTime().toString());
-        holder.importanceTextView.setText(toDoItem.getImportance());
+//        holder.importanceTextView.setText(toDoItem.getImportance());
         holder.isCompletedTextView.setText(toDoItem.isCompleted() ? "已完成" : "未完成");
     }
 
@@ -55,11 +55,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // 列表项中的TextView组件，用于显示ToDoItem的标题和内容
         private TextView titleTextView;
-        private TextView contentTextView;
+//        private TextView contentTextView;
         // 列表项中的TextView组件，用于显示ToDoItem的时间
         private TextView timeTextView;
         // 列表项中的TextView组件，用于显示ToDoItem的重要程度
-        private TextView importanceTextView;
+//        private TextView importanceTextView;
         // 列表项中的TextView组件，用于显示ToDoItem是否已完成
         private TextView isCompletedTextView;
 

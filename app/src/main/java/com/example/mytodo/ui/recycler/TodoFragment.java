@@ -1,6 +1,7 @@
 package com.example.mytodo.ui.recycler;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,8 @@ public class TodoFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    private TodoContentObserver contentObserver;
+    private RecyclerViewAdapter recyclerViewAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -61,13 +65,34 @@ public class TodoFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
+//            if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new RecyclerViewAdapter(ToDoItem.ITEMS));
+//            } else {
+//                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+//            }
+            recyclerViewAdapter = new RecyclerViewAdapter(ToDoItem.getItems()); // 使用ToDoItem的getItems()方法
+            recyclerView.setAdapter(recyclerViewAdapter);
         }
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Register the content observer
+        contentObserver = new TodoContentObserver(new Handler(), recyclerViewAdapter); // 创建TodoContentObserver实例并传入adapter
+        requireContext().getContentResolver().registerContentObserver(
+                Uri.parse("content://com.example.mytodo/items"),
+                true,
+                contentObserver); // 注册contentObserver
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Unregister the content observer
+        if (contentObserver != null) {
+            requireContext().getContentResolver().unregisterContentObserver(contentObserver); // 注销contentObserver
+        }
     }
 }

@@ -77,36 +77,36 @@ public class DatabaseProvider extends ContentProvider {
     // 插入操作，将ContentValues中的数据插入到数据库
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase(); // 获取可写数据库实例
-        long rowId = db.insert("items", null, values); // 插入数据
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        long rowId = db.insert("items", null, values);
         if (rowId > 0) {
-            Uri insertedUri = ContentUris.withAppendedId(uri, rowId); // 构建新的URI
-            getContext().getContentResolver().notifyChange(insertedUri, null); // 通知ContentResolver有数据更改
+            Uri insertedUri = ContentUris.withAppendedId(uri, rowId);
+            getContext().getContentResolver().notifyChange(insertedUri, null);
             return insertedUri;
         }
-        throw new android.database.SQLException("Failed to insert row into " + uri);
+        return null;
     }
 
-    // 更新操作，根据条件更新数据库中的数据
+    // 更新操作，根据ContentValues更新数据库中的数据
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase(); // 获取可写数据库实例
-        int updatedRows = db.update("items", values, selection, selectionArgs);
-        if (updatedRows > 0) {
-            getContext().getContentResolver().notifyChange(uri, null); // 通知ContentResolver有数据更改
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        int count = db.update("items", values, selection, selectionArgs);
+        if (count > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
         }
-        return updatedRows;
+        return count;
     }
 
-    // 删除操作，根据条件删除数据库中的数据
+    // 删除操作，从数据库中删除数据
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase(); // 获取可写数据库实例
-        int deletedRows = db.delete("items", selection, selectionArgs);
-        if (deletedRows > 0) {
-            getContext().getContentResolver().notifyChange(uri, null); // 通知ContentResolver有数据更改
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        int count = db.delete("items", selection, selectionArgs);
+        if (count > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
         }
-        return deletedRows;
+        return count;
     }
 }
 

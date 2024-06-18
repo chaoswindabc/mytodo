@@ -16,9 +16,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS items (" +
                     "    id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "    title TEXT NOT NULL, " +
-                    "    content TEXT, " +
+//                    "    content TEXT, " +
                     "    time DATETIME NOT NULL, " +
-                    "    importance TEXT, " +
+//                    "    importance TEXT, " +
                     "    is_completed BOOLEAN NOT NULL DEFAULT FALSE " +
                     ");";
 
