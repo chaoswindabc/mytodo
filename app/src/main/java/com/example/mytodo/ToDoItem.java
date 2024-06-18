@@ -29,6 +29,10 @@ public class ToDoItem {
         this.isCompleted = false; // 默认情况下，待办事项未完成
     }
 
+    public ToDoItem() {
+
+    }
+
     // Getters 和 Setters
     public long getId() {
         return id;

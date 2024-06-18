@@ -10,4 +10,5 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.recycler.TodoFragment"
-    tools:listitem="@layout/fragment_todo" />
+    tools:listitem="@layout/todo_item"
+    app:divider="@drawable/divider"/>

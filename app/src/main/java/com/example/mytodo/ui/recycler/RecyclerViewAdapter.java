@@ -2,6 +2,11 @@ package com.example.mytodo.ui.recycler;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +32,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // 使用LayoutInflater和传入的父视图（parent）来创建新的视图
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_todo, parent, false);
+                .inflate(R.layout.todo_item, parent, false);
         // 返回一个新的ViewHolder对象，它包含这个新视图的引用
         return new ViewHolder(view);
     }
@@ -42,7 +47,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //        holder.contentTextView.setText(toDoItem.getContent());
         holder.timeTextView.setText(toDoItem.getTime().toString());
 //        holder.importanceTextView.setText(toDoItem.getImportance());
-        holder.isCompletedTextView.setText(toDoItem.isCompleted() ? "已完成" : "未完成");
+//        holder.isCompletedTextView.setText(toDoItem.isCompleted() ? "已完成" : "未完成");
+        // 根据完成状态改变标题颜色
+        if (toDoItem.isCompleted()) {
+            holder.titleTextView.setTextColor(holder.itemView.getContext().getResources().getColor(android.R.color.darker_gray));
+        } else {
+            holder.titleTextView.setTextColor(holder.itemView.getContext().getResources().getColor(android.R.color.black));
+        }
+
     }
 
     // 返回列表中项目（Item）的数量
@@ -73,5 +85,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //            importanceTextView = view.findViewById(R.id.text_view_importance);
 //            isCompletedTextView = view.findViewById(R.id.text_view_is_completed);
         }
+
+
     }
 }

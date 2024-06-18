@@ -42,6 +42,20 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+// 插入两个预设的待办事项
+        dbHelper.insertTodoItem("完成作业", "2024-06-20 18:00:00", false);
+        dbHelper.insertTodoItem("购物", "2024-06-21 10:00:00", false);
     }
+
+    // 在 MainActivity 的 onDestroy 方法中添加以下代码
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        DatabaseHelper dbHelper = new DatabaseHelper(this);
+//        // 删除两个预设的待办事项
+//        dbHelper.deleteTodoItem("完成作业");
+//        dbHelper.deleteTodoItem("购物");
+//    }
 
 }

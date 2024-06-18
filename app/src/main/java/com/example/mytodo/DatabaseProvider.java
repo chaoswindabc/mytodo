@@ -11,6 +11,8 @@ import android.net.Uri;
 
 import com.example.mytodo.DatabaseHelper;
 
+
+//我发现我完全不用写这个玩意，因为没别的app调取uri
 public class DatabaseProvider extends ContentProvider {
 
     // 定义URI匹配器，用于匹配不同的URI
