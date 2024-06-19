@@ -21,6 +21,7 @@ import com.example.mytodo.R;
 import com.example.mytodo.ToDoItem;
 import com.example.mytodo.ui.decoration.Divider;
 import com.example.mytodo.ui.recycler.placeholder.PlaceholderContent;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -82,6 +83,18 @@ public class TodoFragment extends Fragment {
 
         recyclerViewAdapter = new RecyclerViewAdapter(todoItems);
         recyclerView.setAdapter(recyclerViewAdapter);
+
+        FloatingActionButton add_todo = view.findViewById(R.id.add_todo);
+
+        // 设置点击监听器
+        add_todo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 添加新的待做事项
+//                addNewTodoItem();
+            }
+        });
+
         return view;
     }
 
