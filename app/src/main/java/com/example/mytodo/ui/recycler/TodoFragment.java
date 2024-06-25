@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +22,7 @@ import com.example.mytodo.DatabaseHelper;
 import com.example.mytodo.R;
 import com.example.mytodo.ToDoItem;
 import com.example.mytodo.ui.decoration.Divider;
+import com.example.mytodo.ui.operation.AddTodoFragment;
 import com.example.mytodo.ui.recycler.placeholder.PlaceholderContent;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -30,10 +33,8 @@ import java.util.List;
  */
 public class TodoFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+//    private static final String ARG_COLUMN_COUNT = "column-count";
+//    private int mColumnCount = 1;
     private TodoContentObserver contentObserver;
     private RecyclerViewAdapter recyclerViewAdapter;
 
@@ -44,23 +45,13 @@ public class TodoFragment extends Fragment {
     public TodoFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static TodoFragment newInstance(int columnCount) {
-        TodoFragment fragment = new TodoFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+//        if (getArguments() != null) {
+//            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+//        }
     }
 
     @Override
@@ -91,7 +82,8 @@ public class TodoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // 添加新的待做事项
-//                addNewTodoItem();
+                addNewTodoItem();
+                recyclerViewAdapter.notifyDataSetChanged();
             }
         });
 
@@ -117,4 +109,22 @@ public class TodoFragment extends Fragment {
             requireContext().getContentResolver().unregisterContentObserver(contentObserver); // 注销contentObserver
         }
     }
+
+    public void addNewTodoItem() {
+        // 创建 AddTodoFragment 的实例
+        AddTodoFragment addTodoFragment = new AddTodoFragment();
+
+        // 获取 FragmentManager 并开始一个事务
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        // 将当前的 TodoFragment 替换为 AddTodoFragment
+        fragmentTransaction.add(R.id.nav_host_fragment_activity_main, addTodoFragment);
+        fragmentTransaction.addToBackStack(null); // 这允许用户点击返回键时返回上一个 Fragment
+
+        // 提交事务
+        fragmentTransaction.commit();
+    }
 }
+
+

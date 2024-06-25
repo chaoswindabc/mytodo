@@ -76,7 +76,7 @@ public class DatabaseProvider extends ContentProvider {
         }
     }
 
-    // 插入操作，将ContentValues中的数据插入到数据库
+    // 插入操作
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
@@ -89,7 +89,7 @@ public class DatabaseProvider extends ContentProvider {
         return null;
     }
 
-    // 更新操作，根据ContentValues更新数据库中的数据
+    // 更新操作
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
@@ -100,7 +100,7 @@ public class DatabaseProvider extends ContentProvider {
         return count;
     }
 
-    // 删除操作，从数据库中删除数据
+    // 删除操作
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
