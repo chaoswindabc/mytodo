@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mytodo.DatabaseHelper;
+import com.example.mytodo.MyItemTouchHelper;
 import com.example.mytodo.R;
 import com.example.mytodo.ToDoItem;
 import com.example.mytodo.ui.decoration.Divider;
@@ -37,6 +39,7 @@ public class TodoFragment extends Fragment implements AddTodoFragment.OnTodoItem
 //    private int mColumnCount = 1;
 //    private TodoContentObserver contentObserver;
     private RecyclerViewAdapter recyclerViewAdapter;
+    private Context mContext = getContext();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -72,8 +75,12 @@ public class TodoFragment extends Fragment implements AddTodoFragment.OnTodoItem
         RecyclerView.ItemDecoration itemDecoration = new Divider(divider);
         recyclerView.addItemDecoration(itemDecoration);
 
-        recyclerViewAdapter = new RecyclerViewAdapter(todoItems);
+        recyclerViewAdapter = new RecyclerViewAdapter(getContext(),todoItems);
         recyclerView.setAdapter(recyclerViewAdapter);
+
+        ItemTouchHelper.Callback callback = new MyItemTouchHelper(recyclerViewAdapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         FloatingActionButton add_todo = view.findViewById(R.id.add_todo);
 

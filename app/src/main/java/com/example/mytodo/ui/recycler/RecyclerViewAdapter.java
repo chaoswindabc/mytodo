@@ -2,7 +2,10 @@ package com.example.mytodo.ui.recycler;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -21,9 +24,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     // 数据源，包含所有的ToDoItem对象
     private final List<ToDoItem> mValues;
+    private Context mContext;
 
     // 构造函数，接收一个ToDoItem列表作为参数
-    public RecyclerViewAdapter(List<ToDoItem> items) {
+    public RecyclerViewAdapter(Context context,List<ToDoItem> items) {
+        mContext = context;
         mValues = items;
     }
 
@@ -88,6 +93,45 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public void updateItems(List<ToDoItem> items) {
+        mValues.clear(); // 清除旧的数据
+        mValues.addAll(items); // 添加新的数据集
+//        for (ToDoItem item : mValues) {
+//            System.out.println("ToDoItem: " + item.getTitle() + ", " + item.getTime() + ", " + item.isCompleted());
+//        }
+        notifyDataSetChanged(); // 通知数据已更改
+    }
+
+    public void showDeleteConfirmationDialog(final int position) {
+        // 创建一个确认对话框
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("删除事项？");
+        builder.setMessage("确定删除吗？");
+        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                ToDoItem itemToDelete = mValues.get(position);
+                long itemId = itemToDelete.getId();
+                System.out.println(itemId);
+                System.out.println("ToDoItem: " + itemToDelete.getId() + ", "+ itemToDelete.getTitle() + ", " + itemToDelete.getTime() + ", " + itemToDelete.isCompleted());
+                // 删除数据库中的项目
+                DatabaseHelper dbHelper = new DatabaseHelper(mContext);
+                dbHelper.deleteTodoItem(itemId);
+
+                // 从数据库中重新加载最新的数据列表
+                List<ToDoItem> updateItems = dbHelper.getTodoItems();
+                deleteItems(updateItems);
+            }
+        });
+        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // 取消删除，并通知适配器刷新
+                notifyItemChanged(position);
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void deleteItems(List<ToDoItem> items) {
         mValues.clear(); // 清除旧的数据
         mValues.addAll(items); // 添加新的数据集
 //        for (ToDoItem item : mValues) {

@@ -53,9 +53,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteTodoItem(String title) {
+    public void oldDeleteTodoItem(String title) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete("items", "title = ?", new String[]{title});
+        db.close();
+    }
+    public void deleteTodoItem(long itemId) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete("items", "id = ?", new String[] { String.valueOf(itemId) });
         db.close();
     }
 
@@ -66,6 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         while (cursor.moveToNext()) {
             ToDoItem item = new ToDoItem();
+            item.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
             item.setTitle(cursor.getString(cursor.getColumnIndexOrThrow("title")));
             String timeString = cursor.getString(cursor.getColumnIndexOrThrow("time"));
             try {
