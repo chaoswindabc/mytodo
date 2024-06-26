@@ -17,7 +17,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.mytodo.DatabaseHelper;
+import com.example.mytodo.MainActivity;
 import com.example.mytodo.R;
+import com.example.mytodo.ToDoItem;
 
 import java.util.Calendar;
 
@@ -27,10 +29,15 @@ public class AddTodoFragment extends DialogFragment {
     private EditText dateInput;
     private EditText timeInput;
     private DatabaseHelper databaseHelper;
-    private NavController navController;
+    private OnTodoItemAddedListener todoItemAddedListener;
 
     public AddTodoFragment() {
         // 空构造函数
+    }
+
+    public AddTodoFragment(DatabaseHelper dbHelper) {
+        // 构造函数，接收一个DatabaseHelper对象
+        this.databaseHelper = dbHelper;
     }
 
     @Override
@@ -51,7 +58,6 @@ public class AddTodoFragment extends DialogFragment {
         Button addButton = view.findViewById(R.id.add_button);
 //        Button backButton = view.findViewById(R.id.back_button);
 
-        navController = NavHostFragment.findNavController(this);
         // 设置日期输入框的点击监听器
         dateInput.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +93,13 @@ public class AddTodoFragment extends DialogFragment {
 //                    // NavController 为 null，处理错误
 //                    Log.e("AddTodoFragment", "NavController is null");
 //                }
-
+                System.out.println("addToDo");
+                for (ToDoItem item : databaseHelper.getTodoItems()) {
+                    System.out.println("ToDoItem: " + item.getTitle() + ", " + item.getTime() + ", " + item.isCompleted());
+                }
+                if (todoItemAddedListener != null) {
+                    todoItemAddedListener.onTodoItemAdded();
+                }
                 dismiss();
             }
         });
@@ -138,5 +150,13 @@ public class AddTodoFragment extends DialogFragment {
                 }, hour, minute, false);
 
         timePickerDialog.show();
+    }
+
+    public void setOnTodoItemAddedListener(OnTodoItemAddedListener listener) {
+        this.todoItemAddedListener = listener;
+    }
+
+    public interface OnTodoItemAddedListener {
+        void onTodoItemAdded();
     }
 }

@@ -85,7 +85,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //            importanceTextView = view.findViewById(R.id.text_view_importance);
 //            isCompletedTextView = view.findViewById(R.id.text_view_is_completed);
         }
+    }
 
-
+    public void updateItems(List<ToDoItem> items) {
+        mValues.clear(); // 清除旧的数据
+        mValues.addAll(items); // 添加新的数据集
+//        for (ToDoItem item : mValues) {
+//            System.out.println("ToDoItem: " + item.getTitle() + ", " + item.getTime() + ", " + item.isCompleted());
+//        }
+        notifyDataSetChanged(); // 通知数据已更改
     }
 }

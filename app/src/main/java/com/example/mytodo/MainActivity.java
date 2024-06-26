@@ -48,18 +48,17 @@ public class MainActivity extends AppCompatActivity {
 //        dbHelper.insertTodoItem("购物", "2024-06-21 10:00:00", false);
 
         // 删除两个预设的待办事项
-        dbHelper.deleteTodoItem("完成作业");
-        dbHelper.deleteTodoItem("购物");
+//        dbHelper.deleteTodoItem("完成作业");
+//        dbHelper.deleteTodoItem("购物");
     }
 
-    // 在 MainActivity 的 onDestroy 方法中添加以下代码
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
-        // 删除两个预设的待办事项
-        dbHelper.deleteTodoItem("完成作业");
-        dbHelper.deleteTodoItem("购物");
+//        DatabaseHelper dbHelper = new DatabaseHelper(this);
+//        // 删除两个预设的待办事项
+//        dbHelper.deleteTodoItem("完成作业");
+//        dbHelper.deleteTodoItem("购物");
+        this.deleteDatabase("todo_list.db");
     }
-
 }

@@ -31,11 +31,11 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  */
-public class TodoFragment extends Fragment {
+public class TodoFragment extends Fragment implements AddTodoFragment.OnTodoItemAddedListener {
 
 //    private static final String ARG_COLUMN_COUNT = "column-count";
 //    private int mColumnCount = 1;
-    private TodoContentObserver contentObserver;
+//    private TodoContentObserver contentObserver;
     private RecyclerViewAdapter recyclerViewAdapter;
 
     /**
@@ -93,38 +93,59 @@ public class TodoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // Register the content observer
-        contentObserver = new TodoContentObserver(new Handler(), recyclerViewAdapter); // 创建TodoContentObserver实例并传入adapter
-        requireContext().getContentResolver().registerContentObserver(
-                Uri.parse("content://com.example.mytodo/items"),
-                true,
-                contentObserver); // 注册contentObserver
+//        DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
+//        List<ToDoItem> updatedItems = dbHelper.getTodoItems();
+//        System.out.println("ToDo");
+//        for (ToDoItem item : updatedItems) {
+//            System.out.println("ToDoItem: " + item.getTitle() + ", " + item.getTime() + ", " + item.isCompleted());
+//        }
+//        recyclerViewAdapter.updateItems(updatedItems);
+//        recyclerViewAdapter.notifyDataSetChanged();
+//        // Register the content observer
+////        contentObserver = new TodoContentObserver(new Handler(), recyclerViewAdapter); // 创建TodoContentObserver实例并传入adapter
+//        requireContext().getContentResolver().registerContentObserver(
+//                Uri.parse("content://com.example.mytodo/items"),
+//                true,
+////                contentObserver); // 注册contentObserver
     }
 
     @Override
     public void onPause() {
         super.onPause();
         // Unregister the content observer
-        if (contentObserver != null) {
-            requireContext().getContentResolver().unregisterContentObserver(contentObserver); // 注销contentObserver
-        }
+//        if (contentObserver != null) {
+//            requireContext().getContentResolver().unregisterContentObserver(contentObserver); // 注销contentObserver
+//        }
     }
 
     public void addNewTodoItem() {
+        DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
         // 创建 AddTodoFragment 的实例
-        AddTodoFragment addTodoFragment = new AddTodoFragment();
-
-        // 获取 FragmentManager 并开始一个事务
+        AddTodoFragment addTodoFragment = new AddTodoFragment(dbHelper);
+        addTodoFragment.setOnTodoItemAddedListener(this);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        // 将当前的 TodoFragment 替换为 AddTodoFragment
         fragmentTransaction.add(R.id.nav_host_fragment_activity_main, addTodoFragment);
         fragmentTransaction.addToBackStack(null); // 这允许用户点击返回键时返回上一个 Fragment
-
         // 提交事务
         fragmentTransaction.commit();
     }
+
+
+    @Override
+    public void onTodoItemAdded() {
+        // 当待办事项被添加时更新列表
+        DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
+        List<ToDoItem> updatedItems = dbHelper.getTodoItems();
+        System.out.println("ToDo");
+        for (ToDoItem item : updatedItems) {
+            System.out.println("ToDoItem: " + item.getTitle() + ", " + item.getTime() + ", " + item.isCompleted());
+        }
+        recyclerViewAdapter.updateItems(updatedItems);
+        recyclerViewAdapter.notifyDataSetChanged();
+    }
+
 }
 
 
