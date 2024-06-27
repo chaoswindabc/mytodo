@@ -1,15 +1,22 @@
 package com.example.mytodo.ui.recycler;
 
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.service.notification.StatusBarNotification;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +32,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     // 数据源，包含所有的ToDoItem对象
     private final List<ToDoItem> mValues;
     private Context mContext;
+    NotificationManager notificationManager;
 
     // 构造函数，接收一个ToDoItem列表作为参数
     public RecyclerViewAdapter(Context context,List<ToDoItem> items) {
         mContext = context;
         mValues = items;
+        notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     // 创建视图持有者（ViewHolder）的方法
@@ -110,12 +119,37 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onClick(DialogInterface dialog, int which) {
                 ToDoItem itemToDelete = mValues.get(position);
                 long itemId = itemToDelete.getId();
+//                long itemId = 0;
                 System.out.println(itemId);
                 System.out.println("ToDoItem: " + itemToDelete.getId() + ", "+ itemToDelete.getTitle() + ", " + itemToDelete.getTime() + ", " + itemToDelete.isCompleted());
                 // 删除数据库中的项目
                 DatabaseHelper dbHelper = new DatabaseHelper(mContext);
                 dbHelper.deleteTodoItem(itemId);
-
+                System.out.println("deleteID:"+itemId);
+//                printActiveNotificationIds(mContext);
+//                notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+//                if (notificationManager != null) {
+//                    StatusBarNotification[] activeNotifications = notificationManager.getActiveNotifications();
+//                    System.out.println("Active Notification IDs:");
+//                    for (StatusBarNotification statusBarNotification : activeNotifications) {
+//                        int notificationId = statusBarNotification.getId();
+//                        System.out.println(notificationId);
+//                    }
+//                }
+                int notificationIdToCheck = (int) itemId; // 替换为你要检查的通知ID
+                boolean isNotificationActive = isNotificationActive(mContext, notificationIdToCheck);
+                if (isNotificationActive) {
+                    System.out.println("Y");
+                } else {
+                    System.out.println("N");
+                }
+                notificationManager.cancel((int) itemId);
+                cancelScheduledNotification((int) itemId);
+                if (isNotificationActive) {
+                    System.out.println("Y");
+                } else {
+                    System.out.println("N");
+                }
                 // 从数据库中重新加载最新的数据列表
                 List<ToDoItem> updateItems = dbHelper.getTodoItems();
                 deleteItems(updateItems);
@@ -138,5 +172,33 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //            System.out.println("ToDoItem: " + item.getTitle() + ", " + item.getTime() + ", " + item.isCompleted());
 //        }
         notifyDataSetChanged(); // 通知数据已更改
+    }
+
+    private NotificationManagerCompat getNotificationManager() {
+        return NotificationManagerCompat.from(mContext);
+    }
+
+    public static boolean isNotificationActive(Context context, int notificationId) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            StatusBarNotification[] activeNotifications = notificationManager.getActiveNotifications();
+            for (StatusBarNotification statusBarNotification : activeNotifications) {
+                if (statusBarNotification.getId() == notificationId) {
+                    return true; // 找到匹配的通知ID
+                }
+            }
+        }
+        return false; // 没有找到匹配的通知ID
+    }
+
+    private void cancelScheduledNotification(int notificationId) {
+        Intent intent = new Intent(mContext, NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                mContext, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT| PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+        }
     }
 }

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -56,7 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long itemId = db.insert("items", null, values);
         db.close();
 
-        scheduleNotification(itemId, title, time);
+        scheduleNotification((int)itemId, title, time);
     }
 
     public void deleteTodoItem(long itemId) {
@@ -90,7 +91,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return todoItems;
     }
 
-    private void scheduleNotification(long itemId, String title, String timeString) {
+    private void scheduleNotification(int itemId, String title, String timeString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date;
         try {
@@ -103,7 +104,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Intent intent = new Intent(context, NotificationReceiver.class);
         intent.putExtra("todo_text", title);
         intent.putExtra("id", itemId);
-
+//        Log.d("Notification", "Scheduled notification for id: " + itemId);
+        System.out.println("addID:"+itemId);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context, (int) itemId, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 

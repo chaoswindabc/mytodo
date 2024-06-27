@@ -35,11 +35,8 @@ import java.util.List;
  */
 public class TodoFragment extends Fragment implements AddTodoFragment.OnTodoItemAddedListener {
 
-//    private static final String ARG_COLUMN_COUNT = "column-count";
-//    private int mColumnCount = 1;
-//    private TodoContentObserver contentObserver;
     private RecyclerViewAdapter recyclerViewAdapter;
-    private Context mContext = getContext();
+//    private Context mContext = getContext();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -108,21 +105,11 @@ public class TodoFragment extends Fragment implements AddTodoFragment.OnTodoItem
 //        }
 //        recyclerViewAdapter.updateItems(updatedItems);
 //        recyclerViewAdapter.notifyDataSetChanged();
-//        // Register the content observer
-////        contentObserver = new TodoContentObserver(new Handler(), recyclerViewAdapter); // 创建TodoContentObserver实例并传入adapter
-//        requireContext().getContentResolver().registerContentObserver(
-//                Uri.parse("content://com.example.mytodo/items"),
-//                true,
-////                contentObserver); // 注册contentObserver
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        // Unregister the content observer
-//        if (contentObserver != null) {
-//            requireContext().getContentResolver().unregisterContentObserver(contentObserver); // 注销contentObserver
-//        }
     }
 
     public void addNewTodoItem() {
