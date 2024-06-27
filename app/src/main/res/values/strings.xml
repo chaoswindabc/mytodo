@@ -4,6 +4,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">通知设置</string>
+    <string name="title_settings">设置</string>
     <!--    <string name="title_recycler">清单</string>-->
     <string name="title_list">清单</string>
     <!-- Preference Titles -->

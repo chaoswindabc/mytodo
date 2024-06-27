@@ -69,6 +69,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cancelNotificationAndAlarm(itemId);
     }
 
+    public void deleteExpireTodoItems() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentTimeString = sdf.format(new Date());
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete("items", "time < ?", new String[]{currentTimeString});
+        db.close();
+    }
+
+
+
     public List<ToDoItem> getTodoItems() {
         SQLiteDatabase db = getReadableDatabase();
         List<ToDoItem> todoItems = new ArrayList<>();
