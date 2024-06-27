@@ -1,6 +1,7 @@
 package com.example.mytodo;
 
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
@@ -64,6 +65,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.delete("items", "id = ?", new String[]{String.valueOf(itemId)});
         db.close();
+
+        cancelNotificationAndAlarm(itemId);
     }
 
     public List<ToDoItem> getTodoItems() {
@@ -115,6 +118,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             System.out.println("getTime():"+date.getTime());
             System.out.println("currentTimeMillis():"+System.currentTimeMillis());
 //            alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+1000, pendingIntent);
+        }
+    }
+
+    private void cancelNotificationAndAlarm(long itemId) {
+        // 取消通知
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            notificationManager.cancel((int) itemId);
+        }
+
+        // 取消定时器
+        Intent intent = new Intent(context, NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context, (int) itemId, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
         }
     }
 }

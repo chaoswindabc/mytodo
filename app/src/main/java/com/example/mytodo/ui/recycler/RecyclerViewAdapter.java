@@ -126,30 +126,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 DatabaseHelper dbHelper = new DatabaseHelper(mContext);
                 dbHelper.deleteTodoItem(itemId);
                 System.out.println("deleteID:"+itemId);
-//                printActiveNotificationIds(mContext);
-//                notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-//                if (notificationManager != null) {
-//                    StatusBarNotification[] activeNotifications = notificationManager.getActiveNotifications();
-//                    System.out.println("Active Notification IDs:");
-//                    for (StatusBarNotification statusBarNotification : activeNotifications) {
-//                        int notificationId = statusBarNotification.getId();
-//                        System.out.println(notificationId);
-//                    }
+
+                int notificationIdToCheck = (int) itemId;
+//                boolean isNotificationActive = isNotificationActive(mContext, notificationIdToCheck);
+//                if (isNotificationActive) {
+//                    System.out.println("Y");
+//                } else {
+//                    System.out.println("N");
 //                }
-                int notificationIdToCheck = (int) itemId; // 替换为你要检查的通知ID
-                boolean isNotificationActive = isNotificationActive(mContext, notificationIdToCheck);
-                if (isNotificationActive) {
-                    System.out.println("Y");
-                } else {
-                    System.out.println("N");
-                }
-                notificationManager.cancel((int) itemId);
-                cancelScheduledNotification((int) itemId);
-                if (isNotificationActive) {
-                    System.out.println("Y");
-                } else {
-                    System.out.println("N");
-                }
+
+                //搬到helper了
+//                notificationManager.cancel((int) itemId);
+//                cancelScheduledNotification((int) itemId);
+
+//                if (isNotificationActive) {
+//                    System.out.println("Y");
+//                } else {
+//                    System.out.println("N");
+//                }
                 // 从数据库中重新加载最新的数据列表
                 List<ToDoItem> updateItems = dbHelper.getTodoItems();
                 deleteItems(updateItems);
