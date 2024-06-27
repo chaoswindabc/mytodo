@@ -23,14 +23,14 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private final List<ToDoItem> mValues;
-    private Context mContext;
+    private final List<ToDoItem> values;
+    private Context context;
     NotificationManager notificationManager;
 
     public RecyclerViewAdapter(Context context,List<ToDoItem> items) {
-        mContext = context;
-        mValues = items;
-        notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        context = context;
+        values = items;
+        notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     // 创建视图
@@ -47,7 +47,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         // 从数据源中获取当前的ToDoItem对象
-        ToDoItem toDoItem = mValues.get(position);
+        ToDoItem toDoItem = values.get(position);
         // 将ToDoItem的数据绑定到ViewHolder的视图组件上
         holder.titleTextView.setText(toDoItem.getTitle());
 //        holder.contentTextView.setText(toDoItem.getContent());
@@ -65,7 +65,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return values.size();
     }
 
     // 视图组件
@@ -90,9 +90,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public void updateItems(List<ToDoItem> items) {
-        mValues.clear(); // 清除旧的数据
-        mValues.addAll(items); // 添加新的数据集
-//        for (ToDoItem item : mValues) {
+        values.clear(); // 清除旧的数据
+        values.addAll(items); // 添加新的数据集
+//        for (ToDoItem item : values) {
 //            System.out.println("ToDoItem: " + item.getTitle() + ", " + item.getTime() + ", " + item.isCompleted());
 //        }
         notifyDataSetChanged(); // 通知数据已更改
@@ -100,23 +100,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public void showDeleteConfirmationDialog(final int position) {
         // 创建一个确认对话框
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("删除事项？");
         builder.setMessage("确定删除吗？");
         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                ToDoItem itemToDelete = mValues.get(position);
+                ToDoItem itemToDelete = values.get(position);
                 long itemId = itemToDelete.getId();
 //                long itemId = 0;
                 System.out.println(itemId);
                 System.out.println("ToDoItem: " + itemToDelete.getId() + ", "+ itemToDelete.getTitle() + ", " + itemToDelete.getTime() + ", " + itemToDelete.isCompleted());
                 // 删除数据库中的项目
-                DatabaseHelper dbHelper = new DatabaseHelper(mContext);
+                DatabaseHelper dbHelper = new DatabaseHelper(context);
                 dbHelper.deleteTodoItem(itemId);
                 System.out.println("deleteID:"+itemId);
 
 //                int notificationIdToCheck = (int) itemId;
-//                boolean isNotificationActive = isNotificationActive(mContext, notificationIdToCheck);
+//                boolean isNotificationActive = isNotificationActive(context, notificationIdToCheck);
 //                if (isNotificationActive) {
 //                    System.out.println("Y");
 //                } else {
@@ -161,11 +161,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //    }
 //
 //    private void cancelScheduledNotification(int notificationId) {
-//        Intent intent = new Intent(mContext, NotificationReceiver.class);
+//        Intent intent = new Intent(context, NotificationReceiver.class);
 //        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-//                mContext, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT| PendingIntent.FLAG_IMMUTABLE);
+//                context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT| PendingIntent.FLAG_IMMUTABLE);
 //
-//        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+//        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 //        if (alarmManager != null) {
 //            alarmManager.cancel(pendingIntent);
 //        }

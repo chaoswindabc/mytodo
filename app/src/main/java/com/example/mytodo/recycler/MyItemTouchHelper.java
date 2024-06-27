@@ -7,10 +7,10 @@ import com.example.mytodo.recycler.RecyclerViewAdapter;
 
 public class MyItemTouchHelper extends ItemTouchHelper.Callback {
 
-    private RecyclerViewAdapter mAdapter;
+    private RecyclerViewAdapter adapter;
 
     public MyItemTouchHelper(RecyclerViewAdapter adapter) {
-        mAdapter = adapter;
+        adapter = adapter;
     }
 
     // 滑动删除
@@ -30,6 +30,6 @@ public class MyItemTouchHelper extends ItemTouchHelper.Callback {
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         int position = viewHolder.getBindingAdapterPosition();
-        mAdapter.showDeleteConfirmationDialog(position);
+        adapter.showDeleteConfirmationDialog(position);
     }
 }

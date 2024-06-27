@@ -101,7 +101,6 @@ public class AddTodoFragment extends DialogFragment {
         return view;
     }
 
-    // 谷歌material
     private void showDatePickerDialog() {
         // 获取当前日期
         Calendar calendar = Calendar.getInstance();
