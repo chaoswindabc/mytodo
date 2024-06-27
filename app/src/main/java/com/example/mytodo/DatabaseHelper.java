@@ -43,14 +43,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
-    public void insertTodoItem(String title, String time, boolean isCompleted) {
+    public long insertTodoItem(String title, String time, boolean isCompleted) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("title", title);
         values.put("time", time);
         values.put("is_completed", isCompleted);
-        db.insert("items", null, values);
+        long newId = db.insert("items", null, values);
         db.close();
+        return newId;
     }
 
     public void oldDeleteTodoItem(String title) {

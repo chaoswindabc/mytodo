@@ -1,7 +1,13 @@
 package com.example.mytodo.ui.operation;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,12 +22,15 @@ import androidx.fragment.app.DialogFragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.mytodo.AlarmReceiver;
 import com.example.mytodo.DatabaseHelper;
 import com.example.mytodo.MainActivity;
 import com.example.mytodo.R;
 import com.example.mytodo.ToDoItem;
 
+import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
 
 public class AddTodoFragment extends DialogFragment {
 
@@ -30,13 +39,15 @@ public class AddTodoFragment extends DialogFragment {
     private EditText timeInput;
     private DatabaseHelper databaseHelper;
     private OnTodoItemAddedListener todoItemAddedListener;
+    private Context mContext;
 
     public AddTodoFragment() {
         // 空构造函数
     }
 
-    public AddTodoFragment(DatabaseHelper dbHelper) {
+    public AddTodoFragment(Context context, DatabaseHelper dbHelper) {
         // 构造函数，接收一个DatabaseHelper对象
+        this.mContext = context;
         this.databaseHelper = dbHelper;
     }
 
@@ -85,9 +96,10 @@ public class AddTodoFragment extends DialogFragment {
                 boolean isCompleted = false;
 
                 // 插入新的待办事项到数据库
-                databaseHelper.insertTodoItem(title, dateTime, isCompleted);
-
-//                if (navController != null) {
+                long newId = databaseHelper.insertTodoItem(title, dateTime, isCompleted);
+                System.out.println(convertDateTimeStringToTimeStamp(dateTime));
+                setAlarm(mContext,convertDateTimeStringToTimeStamp(dateTime),title, (int) newId);
+                //                if (navController != null) {
 //                    navController.popBackStack();
 //                } else {
 //                    // NavController 为 null，处理错误
@@ -104,15 +116,23 @@ public class AddTodoFragment extends DialogFragment {
             }
         });
 
-        // 设置返回按钮的点击监听器
-//        backButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // 处理返回逻辑，可能是关闭对话框或导航回上一个界面
-//            }
-//        });
-
         return view;
+    }
+
+    public static long convertDateTimeStringToTimeStamp(String dateTimeString) {
+        // 创建 SimpleDateFormat 对象，指定日期时间格式
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        // 尝试解析日期时间字符串
+        Date date;
+        try {
+            date = dateFormat.parse(dateTimeString);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        // 获取日期时间字符串对应的时间戳
+        return date.getTime();
     }
 
     private void showDatePickerDialog() {
@@ -158,5 +178,14 @@ public class AddTodoFragment extends DialogFragment {
 
     public interface OnTodoItemAddedListener {
         void onTodoItemAdded();
+    }
+
+    public void setAlarm(Context context, long time, String title, int id) {
+        Intent intent = new Intent(mContext, AlarmReceiver.class);
+        intent.putExtra("id", id);
+        intent.putExtra("title", title);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, (int) id, intent, PendingIntent.FLAG_UPDATE_CURRENT| PendingIntent.FLAG_IMMUTABLE);
+        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pendingIntent);
     }
 }

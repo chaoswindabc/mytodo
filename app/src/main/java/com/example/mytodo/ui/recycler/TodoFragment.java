@@ -25,7 +25,6 @@ import com.example.mytodo.R;
 import com.example.mytodo.ToDoItem;
 import com.example.mytodo.ui.decoration.Divider;
 import com.example.mytodo.ui.operation.AddTodoFragment;
-import com.example.mytodo.ui.recycler.placeholder.PlaceholderContent;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -128,7 +127,7 @@ public class TodoFragment extends Fragment implements AddTodoFragment.OnTodoItem
     public void addNewTodoItem() {
         DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
         // 创建 AddTodoFragment 的实例
-        AddTodoFragment addTodoFragment = new AddTodoFragment(dbHelper);
+        AddTodoFragment addTodoFragment = new AddTodoFragment(getContext(), dbHelper);
         addTodoFragment.setOnTodoItemAddedListener(this);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
