@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -29,6 +32,7 @@
             <grant-uri-permission android:pathPattern=".*" android:readPermission="com.example.mytodo.permission.READ_DATA" />
             <grant-uri-permission android:pathPattern=".*" android:writePermission="com.example.mytodo.permission.WRITE_DATA" />
         </provider>
+        <receiver android:name=".NotificationReceiver" />
     </application>
 
 </manifest>
