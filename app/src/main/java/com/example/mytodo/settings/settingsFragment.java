@@ -1,4 +1,4 @@
-package com.example.mytodo.ui.settings;
+package com.example.mytodo.settings;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.mytodo.DatabaseHelper;
+import com.example.mytodo.database.DatabaseHelper;
 import com.example.mytodo.R;
 import com.example.mytodo.databinding.FragmentSettingsBinding;
 

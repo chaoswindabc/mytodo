@@ -1,4 +1,4 @@
-package com.example.mytodo;
+package com.example.mytodo.notifications;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;

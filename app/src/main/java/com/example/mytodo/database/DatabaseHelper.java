@@ -1,4 +1,4 @@
-package com.example.mytodo;
+package com.example.mytodo.database;
 
 import android.app.AlarmManager;
 import android.app.NotificationManager;
@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+
+import com.example.mytodo.notifications.NotificationReceiver;
+import com.example.mytodo.recycler.ToDoItem;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,13 +19,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-// 数据库帮助类，用于管理SQLite数据库的创建、升级和操作
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "todo_list.db";
     private static final int DATABASE_VERSION = 1;
     private Context context;
 
-    // 创建数据库和表的SQL语句
     private static final String CREATE_TABLE =
             "CREATE TABLE IF NOT EXISTS items (" +
                     "    id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -32,13 +32,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "    is_completed BOOLEAN NOT NULL DEFAULT FALSE " +
                     ");";
 
-    // 构造函数
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
 
-    // 创建表
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE);
@@ -46,7 +44,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // 升级数据库的逻辑
     }
 
     public void insertTodoItem(String title, String time, boolean isCompleted) {
@@ -69,6 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cancelNotificationAndAlarm(itemId);
     }
 
+    // 删除过期事项
     public void deleteExpireTodoItems() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTimeString = sdf.format(new Date());
@@ -80,6 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
+    // 查询全表
     public List<ToDoItem> getTodoItems() {
         SQLiteDatabase db = getReadableDatabase();
         List<ToDoItem> todoItems = new ArrayList<>();
@@ -94,7 +93,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Date time = sdf.parse(timeString);
                 item.setTime(time);
             } catch (ParseException e) {
-                // 处理解析异常
                 e.printStackTrace();
             }
             item.setCompleted(cursor.getInt(cursor.getColumnIndexOrThrow("is_completed")) == 1);
@@ -105,6 +103,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return todoItems;
     }
 
+    // 实现通知的设置和删除
     private void scheduleNotification(int itemId, String title, String timeString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date;

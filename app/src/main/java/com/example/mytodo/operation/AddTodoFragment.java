@@ -1,9 +1,8 @@
-package com.example.mytodo.ui.operation;
+package com.example.mytodo.operation;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +12,10 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.mytodo.DatabaseHelper;
-import com.example.mytodo.MainActivity;
+import com.example.mytodo.database.DatabaseHelper;
 import com.example.mytodo.R;
-import com.example.mytodo.ToDoItem;
+import com.example.mytodo.recycler.ToDoItem;
 
 import java.util.Calendar;
 
@@ -32,32 +28,28 @@ public class AddTodoFragment extends DialogFragment {
     private OnTodoItemAddedListener todoItemAddedListener;
 
     public AddTodoFragment() {
-        // 空构造函数
     }
 
     public AddTodoFragment(DatabaseHelper dbHelper) {
-        // 构造函数，接收一个DatabaseHelper对象
         this.databaseHelper = dbHelper;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 初始化DatabaseHelper
         databaseHelper = new DatabaseHelper(getActivity());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_todo, container, false);
 
         titleInput = view.findViewById(R.id.title_input);
         dateInput = view.findViewById(R.id.date_input);
         Button addButton = view.findViewById(R.id.add_button);
 
-        // 设置日期输入框的点击监听器
+        // 设置日期
         dateInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,7 +59,7 @@ public class AddTodoFragment extends DialogFragment {
 
         timeInput = view.findViewById(R.id.time_input);
 
-        // 设置时间输入框的点击监听器
+        // 设置时间
         timeInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,19 +67,18 @@ public class AddTodoFragment extends DialogFragment {
             }
         });
 
-        // 设置日期输入框的默认值为当前日期
+        // 设置默认值为当前时间
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         dateInput.setText(year + "-" + String.format("%02d", (month + 1)) + "-" + String.format("%02d", day));
 
-        // 设置时间输入框的默认值为当前时间
         int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
         timeInput.setText(String.format("%02d", hourOfDay) + ":" + String.format("%02d", minute));
 
-        // 设置添加按钮的点击监听器
+        // 添加
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,13 +88,6 @@ public class AddTodoFragment extends DialogFragment {
 
                 // 插入新的待办事项到数据库
                 databaseHelper.insertTodoItem(title, dateTime, isCompleted);
-
-//                if (navController != null) {
-//                    navController.popBackStack();
-//                } else {
-//                    // NavController 为 null，处理错误
-//                    Log.e("AddTodoFragment", "NavController is null");
-//                }
                 System.out.println("addToDo");
                 for (ToDoItem item : databaseHelper.getTodoItems()) {
                     System.out.println("ToDoItem: " + item.getTitle() + ", " + item.getTime() + ", " + item.isCompleted());
@@ -114,18 +98,10 @@ public class AddTodoFragment extends DialogFragment {
                 dismiss();
             }
         });
-
-        // 设置返回按钮的点击监听器
-//        backButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // 处理返回逻辑，可能是关闭对话框或导航回上一个界面
-//            }
-//        });
-
         return view;
     }
 
+    // 谷歌material
     private void showDatePickerDialog() {
         // 获取当前日期
         Calendar calendar = Calendar.getInstance();
@@ -133,7 +109,6 @@ public class AddTodoFragment extends DialogFragment {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        // 创建DatePickerDialog实例
         DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -143,7 +118,6 @@ public class AddTodoFragment extends DialogFragment {
                     }
                 }, year, month, day);
 
-        // 显示DatePickerDialog
         datePickerDialog.show();
     }
 

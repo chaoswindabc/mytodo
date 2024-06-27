@@ -5,27 +5,15 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_recycler">
 
-<!--    <fragment-->
-    <!--        android:id="@+id/navigation_home"-->
-    <!--        android:name="com.example.mytodo.ui.home.HomeFragment"-->
-    <!--        android:label="@string/title_home"-->
-    <!--        tools:layout="@layout/fragment_home" />-->
-
-    <!--    <fragment-->
-    <!--        android:id="@+id/navigation_dashboard"-->
-    <!--        android:name="com.example.mytodo.ui.dashboard.DashboardFragment"-->
-    <!--        android:label="@string/title_dashboard"-->
-    <!--        tools:layout="@layout/fragment_dashboard" />-->
-
     <fragment
         android:id="@+id/navigation_recycler"
-        android:name="com.example.mytodo.ui.recycler.TodoFragment"
+        android:name="com.example.mytodo.recycler.TodoFragment"
         android:label="@string/title_list"
         tools:layout="@layout/fragment_todo_recycler" />
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.example.mytodo.ui.settings.settingsFragment"
+        android:name="com.example.mytodo.settings.settingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
 

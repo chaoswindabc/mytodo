@@ -1,4 +1,4 @@
-package com.example.mytodo.ui.decoration;
+package com.example.mytodo.decoration;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;

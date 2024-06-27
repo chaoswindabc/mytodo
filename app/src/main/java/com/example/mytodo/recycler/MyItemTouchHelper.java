@@ -1,9 +1,9 @@
-package com.example.mytodo;
+package com.example.mytodo.recycler;
 
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mytodo.ui.recycler.RecyclerViewAdapter;
+import com.example.mytodo.recycler.RecyclerViewAdapter;
 
 public class MyItemTouchHelper extends ItemTouchHelper.Callback {
 
@@ -13,6 +13,7 @@ public class MyItemTouchHelper extends ItemTouchHelper.Callback {
         mAdapter = adapter;
     }
 
+    // 滑动删除
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
@@ -24,6 +25,8 @@ public class MyItemTouchHelper extends ItemTouchHelper.Callback {
         return false;
     }
 
+
+    // 滑动效果
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         int position = viewHolder.getBindingAdapterPosition();

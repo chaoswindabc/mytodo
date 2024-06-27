@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.example.mytodo.database.DatabaseHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,17 +29,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         DatabaseHelper dbHelper = new DatabaseHelper(this);
 
-        // 初始化数据库（如果尚未创建）
+        // 初始化
         dbHelper.getWritableDatabase();
-
         createNotificationChannel();
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.navigation_home,
-//                R.id.navigation_dashboard,
                 R.id.navigation_recycler,
                 R.id.navigation_settings
 //                R.id.navigation_calendar,
@@ -49,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-// 插入两个预设的待办事项
+        // test
+        // 插入两个预设的待办事项
 //        dbHelper.insertTodoItem("完成作业", "2024-06-20 18:00:00", false);
 //        dbHelper.insertTodoItem("购物", "2024-06-21 10:00:00", false);
 
@@ -57,17 +56,6 @@ public class MainActivity extends AppCompatActivity {
 //        dbHelper.deleteTodoItem("完成作业");
 //        dbHelper.deleteTodoItem("购物");
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        DatabaseHelper dbHelper = new DatabaseHelper(this);
-//        // 删除两个预设的待办事项
-//        dbHelper.deleteTodoItem("完成作业");
-//        dbHelper.deleteTodoItem("购物");
-//        this.deleteDatabase("todo_list.db");
-    }
-
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

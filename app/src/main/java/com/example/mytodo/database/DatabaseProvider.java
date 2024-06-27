@@ -1,4 +1,4 @@
-package com.example.mytodo;
+package com.example.mytodo.database;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -9,10 +9,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
-import com.example.mytodo.DatabaseHelper;
-
-
-//我发现我完全不用写这个玩意，因为没别的app调取uri
+// 这段直接用chatglm了
+// 我后来发现我完全不用写这个玩意，因为根本没别的app调取uri
 public class DatabaseProvider extends ContentProvider {
 
     // 定义URI匹配器，用于匹配不同的URI
@@ -28,10 +26,8 @@ public class DatabaseProvider extends ContentProvider {
         uriMatcher.addURI("com.example.mytodo", "items/#", ITEM_ID); // 匹配特定item的ID
     }
 
-    // 数据库帮助类实例，用于管理数据库的创建、升级和操作
     private DatabaseHelper databaseHelper;
 
-    // 内容提供者创建时调用，用于初始化数据库帮助类
     @Override
     public boolean onCreate() {
         Context context = getContext();
@@ -45,10 +41,8 @@ public class DatabaseProvider extends ContentProvider {
         SQLiteDatabase db = databaseHelper.getReadableDatabase(); // 获取可读数据库实例
         Cursor cursor = null;
 
-        // 根据URI匹配器匹配到的结果，执行不同的查询操作
         switch (uriMatcher.match(uri)) {
             case ITEMS:
-                // 查询所有待办事项，按时间顺序排序
                 cursor = db.query("items", projection, selection, selectionArgs, null, null, "time ASC");
                 break;
             case ITEM_ID:
@@ -63,7 +57,6 @@ public class DatabaseProvider extends ContentProvider {
         return cursor;
     }
 
-    // 获取内容类型，用于判断URI的类型
     @Override
     public String getType(Uri uri) {
         switch (uriMatcher.match(uri)) {

@@ -1,4 +1,4 @@
-package com.example.mytodo;
+package com.example.mytodo.recycler;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,12 +12,11 @@ public class ToDoItem {
 //    private String importance; // 重要程度，例如 "重要" 或 "不重要"
     private boolean isCompleted; // 标记事项是否已完成
 
-    // 构造函数
 //    public ToDoItem(String title, String content, Date time, String importance) {
 //        this.title = title;
-////        this.content = content;
+//        this.content = content;
 //        this.time = time;
-////        this.importance = importance;
+//        this.importance = importance;
 //        this.isCompleted = false;
 //    }
 

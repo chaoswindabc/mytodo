@@ -1,31 +1,24 @@
-package com.example.mytodo.ui.recycler;
+package com.example.mytodo.recycler;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.mytodo.DatabaseHelper;
-import com.example.mytodo.MyItemTouchHelper;
+import com.example.mytodo.database.DatabaseHelper;
 import com.example.mytodo.R;
-import com.example.mytodo.ToDoItem;
-import com.example.mytodo.ui.decoration.Divider;
-import com.example.mytodo.ui.operation.AddTodoFragment;
-import com.example.mytodo.ui.recycler.placeholder.PlaceholderContent;
+import com.example.mytodo.decoration.Divider;
+import com.example.mytodo.operation.AddTodoFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -48,10 +41,6 @@ public class TodoFragment extends Fragment implements AddTodoFragment.OnTodoItem
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        if (getArguments() != null) {
-//            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-//        }
     }
 
     @Override
@@ -81,11 +70,10 @@ public class TodoFragment extends Fragment implements AddTodoFragment.OnTodoItem
 
         FloatingActionButton add_todo = view.findViewById(R.id.add_todo);
 
-        // 设置点击监听器
+        // 增加事项
         add_todo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 添加新的待做事项
                 addNewTodoItem();
                 recyclerViewAdapter.notifyDataSetChanged();
             }
@@ -129,7 +117,7 @@ public class TodoFragment extends Fragment implements AddTodoFragment.OnTodoItem
 
     @Override
     public void onTodoItemAdded() {
-        // 当待办事项被添加时更新列表
+        // 接口实现，当待办事项被添加时更新列表
         DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
         List<ToDoItem> updatedItems = dbHelper.getTodoItems();
         System.out.println("ToDo");

@@ -13,7 +13,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".ui.recycler.TodoFragment"
+        tools:context=".recycler.TodoFragment"
         tools:listitem="@layout/todo_item"
         app:divider="@drawable/divider"/>
 
