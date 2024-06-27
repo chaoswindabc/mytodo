@@ -16,6 +16,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        int id = intent.getIntExtra("id", 0);
         String todoText = intent.getStringExtra("todo_text");
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "todo_channel")
@@ -37,6 +38,6 @@ public class NotificationReceiver extends BroadcastReceiver {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        notificationManager.notify(200, builder.build());
+        notificationManager.notify(id, builder.build());
     }
 }

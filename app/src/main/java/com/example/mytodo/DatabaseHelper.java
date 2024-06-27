@@ -102,6 +102,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Intent intent = new Intent(context, NotificationReceiver.class);
         intent.putExtra("todo_text", title);
+        intent.putExtra("id", itemId);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context, (int) itemId, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
