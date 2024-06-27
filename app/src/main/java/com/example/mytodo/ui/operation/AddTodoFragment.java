@@ -56,7 +56,6 @@ public class AddTodoFragment extends DialogFragment {
         titleInput = view.findViewById(R.id.title_input);
         dateInput = view.findViewById(R.id.date_input);
         Button addButton = view.findViewById(R.id.add_button);
-//        Button backButton = view.findViewById(R.id.back_button);
 
         // 设置日期输入框的点击监听器
         dateInput.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +74,18 @@ public class AddTodoFragment extends DialogFragment {
                 showTimePickerDialog();
             }
         });
+
+        // 设置日期输入框的默认值为当前日期
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        dateInput.setText(year + "-" + String.format("%02d", (month + 1)) + "-" + String.format("%02d", day));
+
+        // 设置时间输入框的默认值为当前时间
+        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        timeInput.setText(String.format("%02d", hourOfDay) + ":" + String.format("%02d", minute));
 
         // 设置添加按钮的点击监听器
         addButton.setOnClickListener(new View.OnClickListener() {

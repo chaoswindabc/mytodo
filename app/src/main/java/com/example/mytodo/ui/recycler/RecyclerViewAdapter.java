@@ -174,10 +174,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         notifyDataSetChanged(); // 通知数据已更改
     }
 
-    private NotificationManagerCompat getNotificationManager() {
-        return NotificationManagerCompat.from(mContext);
-    }
-
     public static boolean isNotificationActive(Context context, int notificationId) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
